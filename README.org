@@ -1,0 +1,29 @@
+#+TITLE: SoundCloud Scraper
+
+This Python script is a command-line tool that scrapes SoundCloud for a given user's likes or posted tracks, and optionally plays them using mpv.
+
+* Dependencies
+- Python 3.6 or later
+- beautifulsoup4
+- selenium
+- argparse
+- subprocess
+- os
+- json
+
+* Usage
+#+BEGIN_QUOTE
+python soundcloud.py -u USERNAME [-m MODE] [-p]
+
+-u or --username: Required. The SoundCloud username of the user whose likes or tracks you want to scrape.
+-m or --mode: Optional. The scraping mode, either likes (default) or tracks, to scrape the user's likes or their posted tracks, respectively.
+-p or --play: Optional. Play the scraped songs using mpv.
+#+END_QUOTE
+* Cache
+The script caches the scraped songs in a JSON file in the $XDG_CONFIG_HOME/soundcloudpy directory (or ~/.config/soundcloudpy if $XDG_CONFIG_HOME is not set). If the cache file exists, the script uses the cached songs instead of scraping again.
+
+* Scraping
+The script launches a new instance of the Chrome browser with Selenium, loads the SoundCloud URL for the user's likes or tracks page in the browser, and then scrolls down the page to load all the elements dynamically. It then parses the HTML response using BeautifulSoup and lxml, finds all the song elements on the page depending on the selected mode, and iterates over each song element to extract the artist, title, and URL for the track. The scraped songs are stored in a list of dictionaries.
+
+* Playing
+If the -p or --play flag is set, the script plays the scraped songs using mpv.
